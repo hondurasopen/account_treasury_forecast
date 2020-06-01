@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+<data>
+
+<record model="ir.ui.view" id="veddepessa_sale_department_line_tree_view">
+    <field name="name">veddepessa.sale.department.line.tree.view</field>
+    <field name="model">veddepessa.sale.department.line</field>
+    <field name="arch" type="xml">
+        <tree string="Reporte por Ciudad" edit="0" delete="0" create="0">
+            <field name="state_id"/>
+            <field name="gal_diesel" sum="Total"/>
+            <field name="gal_super" sum="Total"/>
+            <field name="gal_regular" sum="Total"/>
+            <field name="gal_kerosene" sum="Total"/>
+        </tree>
+    </field>
+</record>
+
+<record id="action_veddepessa_sale_department_line" model="ir.actions.act_window">
+    <field name="name">Resumen departamentos</field>
+    <field name="res_model">veddepessa.sale.department.line</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree</field>
+    <field name="domain"> [('parent_id', '=', active_id)]</field>
+</record>
+
+<record model="ir.ui.view" id="veddepessa_sale_city_line_tree_view">
+    <field name="name">veddepessa.sale.city.line.tree.view</field>
+    <field name="model">veddepessa.sale.city.line</field>
+    <field name="arch" type="xml">
+        <tree string="Reporte por Ciudad" edit="0" delete="0" create="0">
+        	<field name="city_id"/>
+            <field name="gal_diesel" sum="Total"/>
+            <field name="gal_super" sum="Total"/>
+    		<field name="gal_regular" sum="Total"/>
+   			<field name="gal_kerosene" sum="Total"/>
+        </tree>
+    </field>
+</record>
+
+<record id="action_veddepessa_sale_city_line" model="ir.actions.act_window">
+	<field name="name">Resumen de ciudades</field>
+	<field name="res_model">veddepessa.sale.city.line</field>
+	<field name="view_type">form</field>
+	<field name="view_mode">tree</field>
+	<field name="domain"> [('parent_id', '=', active_id)]</field>
+</record>
+
+<record model="ir.ui.view" id="eddepessa_sale_city_form_view">
+<field name="name">eddepessa.sale.city.form.view</field>
+<field name="model">veddepessa.sale.city</field>
+<field name="arch" type="xml">
+<form string="Resumen de cliente">
+    <header>
+    <button name="button_calculate" type="object" string="Generar reportes" class="oe_highlight"/>
+    </header>
+<sheet>		       
+    <div class="oe_right oe_button_box" position="inside">
+        <button class="oe_stat_button" icon="fa-list-ol" type="action" name="%(action_veddepessa_sale_city_line)d" string="Ciudades"/>
+        <button class="oe_stat_button" icon="fa-list-ol" type="action" name="%(action_veddepessa_sale_department_line)d" string="Departamentos"/>
+    </div>
+    <group colspan="4">
+    <group cols="2">          
+    		<field name="start_date"/>
+    </group>
+    <group cols="2">
+      <field name="end_date"/>
+      <field name="name" invisible="1"/>
+    </group>
+    </group>    
+    <notebook colspan="4">  
+        <page string="Galones por ciudad">
+    	   <field name="line_ids" readonly="1"/>
+        </page> 
+        <page string="Galones por ciudad">
+           <field name="department_ids" readonly="1"/>
+        </page> 
+    </notebook>
+</sheet>
+</form>
+</field>
+</record>
+
+
+<record model="ir.ui.view" id="veddepessa_sale_city_tree_view">
+<field name="name">veddepessa.sale.city.tree.view</field>
+<field name="model">veddepessa.sale.city</field>
+<field name="arch" type="xml">
+    <tree string="Treasury Forecast">
+    	<field name="name" />
+    	<field name="start_date"/>
+        <field name="end_date" />
+    </tree>
+</field>
+</record>
+
+<record id="action_veddepessa_sale_city" model="ir.actions.act_window">
+    <field name="name">Galones x Ciudad</field>
+    <field name="res_model">veddepessa.sale.city</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="help">Galones x Ciudad</field>
+</record>
+
+<menuitem action="action_veddepessa_sale_city" id="menu_veddepessa_sale_city" name="Galones x Ciudad" parent="delivery_cost.menu_reportes" />
+
+</data>
+</openerp>

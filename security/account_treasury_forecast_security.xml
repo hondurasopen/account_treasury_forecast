@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="treasury_manager" model="res.groups">
+		<field name="category_id" ref="module_funds_requisition"/>
+            <field name="name">Financial / Treasury Forecast</field>
+        </record>
+    </data>
+</openerp>

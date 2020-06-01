@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+<data>
+
+
+<record model="ir.ui.view" id="veddepessa_sale_gals_qty_line_tree_view">
+    <field name="name">veddepessa.sale.gals.qty.line.tree.view</field>
+    <field name="model">veddepessa.sale.gals.qty.line</field>
+    <field name="arch" type="xml">
+        <tree string="Treasury Forecast">
+        	<field name="partner_id"/>
+            <field name="gal_diesel" sum="Total"/>
+            <field name="gal_super" sum="Total"/>
+    		<field name="gal_regular" sum="Total"/>
+   			<field name="gal_kerosene" sum="Total"/>
+        </tree>
+    </field>
+</record>
+
+<record id="action_veddepessa_sale_gals_qty_linel" model="ir.actions.act_window">
+    	<field name="name">Resumen de clientes</field>
+    	<field name="res_model">veddepessa.sale.gals.qty.line</field>
+    	<field name="view_type">form</field>
+    	<field name="view_mode">tree</field>
+    	<field name="domain"> [('parent_id', '=', active_id)]</field>
+</record>
+
+<record model="ir.ui.view" id="veddepessa_sale_gals_qty_form_view">
+<field name="name">veddepessa.sale.gals.qty.form.cliente</field>
+<field name="model">veddepessa.sale.gals.qty</field>
+<field name="arch" type="xml">
+    <form string="Resumen de cliente">
+     <header>
+		<button name="action_draft" type="object" string="Borrador" states="progress"/>
+		<button name="action_done" type="object" string="Finalizado" states="draft,progress" class="oe_highlight oe_read_only"/>
+		<button name="button_calculate" type="object" string="Obtener datos" class="oe_highlight"/>
+		<field name="state" widget="statusbar" nolabel="1"/>
+   	</header>
+    <sheet>		       
+	<div class="oe_right oe_button_box" position="inside">
+		<button class="oe_stat_button" icon="fa-list-ol" type="action" name="%(action_veddepessa_sale_gals_qty_linel)d" string="Resumen"/>
+    </div>   
+
+
+	<group colspan="4">
+		<group cols="2">          
+	 		<field name="start_date" attrs="{'readonly': [('state','!=','draft')]}"/>
+			<field name="tipo_cliente" required="1"/>
+		</group>
+		<group cols="2">
+	      <field name="end_date" attrs="{'readonly': [('state','!=','draft')]}"/>
+	      <field name="name" attrs="{'readonly': [('state','!=','draft')]}"/>
+		</group>
+	</group>		
+     <separator string="Resumen de Operaciones"/>
+		<group colspan="4" col="2">				             
+		<group cols="2">
+			
+		</group>  
+		<group cols="2">
+		</group>											
+		</group>
+					    
+   	<notebook colspan="4">  
+		<page string="Indicadores">
+			<field name="line_ids" readonly="1"/>
+		</page> 
+	</notebook>
+	</sheet>
+    </form>
+    </field>
+    </record>
+
+
+ <record model="ir.ui.view" id="veddepessa_sale_gals_qty_tree_view">
+    <field name="name">veddepessa.sale.gals.qty.tree.view</field>
+    <field name="model">veddepessa.sale.gals.qty</field>
+    <field name="arch" type="xml">
+        <tree string="Treasury Forecast">
+        	<field name="name" />
+        	<field name="start_date"/>
+            <field name="end_date" />
+            <field name="tipo_cliente" />
+        </tree>
+    </field>
+</record>
+
+<record id="action_veddepessa_sale_gals_qty" model="ir.actions.act_window">
+    <field name="name">Galones x Clientes</field>
+    <field name="res_model">veddepessa.sale.gals.qty</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="help">Galones x Clientes</field>
+</record>
+
+        <!--<menuitem id="menu_account_treasury_forecast" name="Account Treasury Forecast"
+            parent="financial.finanzas_principal" sequence="8" groups="account.group_account_user"/>-->
+<menuitem action="action_veddepessa_sale_gals_qty" id="menu_veddepessa_sale_gals_qty"
+name="Galones x Clientes" parent="delivery_cost.menu_reportes" />
+
+    </data>
+</openerp>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+ <data>
+
+
+<record id="libro_ventas_ved_line_tree" model="ir.ui.view">
+<field name="name">libro.ventas.ved.line.tree</field>
+<field name="model">libro.ventas.ved.line</field>                     
+<field name="arch" type="xml">
+    <tree >
+	     <field name="partner_id" />
+		<field name="invoice_id" invisible="1"/>
+		<field name="internal_number" />
+		<field name="invoice_date" />
+		<field name="nota_credito" invisible="1"/>
+		<field name="num_nota" />
+		<field name="total_amount" sum="total"/>
+		<field name="total_ncredito" sum="total"/>
+		<field name="state" />
+    </tree>             
+</field>
+</record>
+
+<record id="action_libro_ventas_ved_line" model="ir.actions.act_window">
+  <field name="name">Facturas</field>
+  <field name="res_model">libro.ventas.ved.line</field>
+  <field name="view_mode">tree</field>
+  <field name="domain"> [('obj_parent', '=', active_id)]</field>
+</record>
+
+<record model="ir.ui.view" id="libro_ventas_ved_tree_view">
+<field name="name">libro.ventas.ved.tree</field>
+<field name="model">libro.ventas.ved</field>
+<field name="arch" type="xml">
+    <tree string="Treasury Forecast">
+    	<field name="start_date"/>
+        <field name="end_date" />
+        <field name="total_factura" />
+		<field name="total_notas"/>
+		<field name="total_neto"/>
+    </tree>
+</field>
+</record>
+
+
+<record model="ir.ui.view" id="libro_ventas_ved_cliente_form_view">
+<field name="name">libro.ventas.ved.form.cliente</field>
+<field name="model">libro.ventas.ved</field>
+<field name="arch" type="xml">
+<form string="Resumen de cliente">
+ <header>
+	<button name="button_calculate" type="object" string="Obtener datos" class="oe_highlight"/>
+	</header>
+ <sheet>		       
+		<div class="oe_right oe_button_box" position="inside">
+			<button class="oe_stat_button"
+                    icon="fa-tasks"
+                    type="action" name="%(action_libro_ventas_ved_line)d"
+                    string="Facturas">
+            </button>	
+        </div>   
+	  	<!--<separator string="Rango de Fechas"/> -->    
+       
+        <group colspan="4">
+			<group cols="2">          
+			 		<field name="start_date"/>
+			</group>
+			<group cols="2">
+                  <field name="end_date" />
+			</group>
+        </group>		
+	     <separator string="Resumen"/>
+  			<group colspan="4" col="2">				             
+		
+				<group cols="2">
+					<h3><strong><label string="Total de Facturas:"/></strong></h3>
+			 			<field name="total_factura" nolabel="1" class="oe_subtotal_footer_separator"/>
+					
+
+					<h3><strong><label string="Notas de Crédito:"/></strong></h3>
+			 		<field name="total_notas" nolabel="1" class="oe_subtotal_footer_separator"/>
+
+			 		<h3><strong><label string="Total Neto:"/></strong></h3>
+			 		<field name="total_neto" nolabel="1" class="oe_subtotal_footer_separator"/>
+				</group>											
+			</group>
+					    
+   <notebook colspan="4">  
+      <page string="Facturas de Ventas" sequence="10">
+          <field name="out_invoice_ids"> 	
+               <tree>
+					<field name="partner_id" />
+					<field name="invoice_id" invisible="1"/>
+					<field name="internal_number" />
+					<field name="invoice_date" />
+					<field name="nota_credito" invisible="1"/>
+					<field name="num_nota" />
+					<field name="total_amount" sum="total"/>
+					<field name="total_ncredito" sum="total"/>
+					<field name="state" />
+               </tree>
+          </field>
+      </page>
+      
+   </notebook>
+        
+</sheet>
+    </form>
+    </field>
+    </record>
+
+<record id="action_libro_ventas_ved" model="ir.actions.act_window">
+<field name="name">Libro de Ventas</field>
+<field name="res_model">libro.ventas.ved</field>
+<field name="view_type">form</field>
+<field name="view_mode">tree,form</field>
+<field name="help">Resumen de ventas</field>
+</record>
+
+
+<menuitem action="action_libro_ventas_ved" id="menu_libro_ventas_ved"
+    name="Libro de ventas" parent="delivery_cost.menu_reportes" />
+
+    </data>
+</openerp>

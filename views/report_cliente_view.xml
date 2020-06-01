@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+		<record model="ir.ui.view" id="account_delivery_forecast_invoice_cliente_search">
+           		 <field name="name">account.delivery.forecast.invoice.cliente.search</field>
+           		 <field name="model">account.delivery.forecast.invoice.cliente</field>
+           		 <field name="arch" type="xml">
+				<search string ='Buscar'>
+					<field name="partner_id" filter_domain="[('partner_id', 'ilike', self)]" string="Cliente"/>
+					<field name="invoice_date" filter_domain="[('invoice_date', 'ilike', self)]" string="Por Fecha"/>
+					<filter string="Facturas Pagadas" domain="[('state','=','paid')]" name="Facturas Pagadas"/>
+					<filter string="Facturas Abiertas" domain="[('state','=','open')]" name="Facturas Abiertas"/>
+					 <separator/>
+					  <group expand="0" string="Agrupado por">
+           				   <filter string="Cliente"  domain="[]" context="{'group_by':'partner_id'}"/>
+						  <filter string="Estado de Factura"  domain="[]" context="{'group_by':'state'}"/>	
+						<filter string="Agrupar por fecha"  domain="[]" context="{'group_by':'invoice_date'}"/>		
+                   	</group>
+				
+				</search>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="delivery_forecast_facturas_cliente_tree_view">
+            <field name="name">account.delviery.forecast.invoice.cliente.tree</field>
+            <field name="model">account.delivery.forecast.invoice.cliente</field>
+            <field name="arch" type="xml">  
+                <tree string="Resumen" editable="bottom" readonly="True" colors="red:state =='open';blue:state =='done'">
+                    <field name="partner_id"/>
+                    <field name="invoice_id" />
+					<field name="pedido_venta_id"/>
+					 <field name="invoice_date" readonly="1"/>
+					<!--<field name="date_due" />-->
+					<field name="residual_amount" sum="Total" invisible="1"/>
+                    <field name="total_ncredito" sum="Total"/>
+                    <field name="costo_flete" sum="Total"/>
+                    <field name="total_amount" sum="Total"/>
+					<field name="costo_combustible" sum="Total"/>
+					<field name="total_galones" sum="Total"/>
+                    <field name="state" invisible="1"/>
+                  </tree>
+            </field>
+        </record>
+
+		 <record model="ir.ui.view" id="view_forecast_facturas_cliente_graph">
+            <field name="name">account.delivery.forecast.invoice.cliente.graph</field>
+            <field name="model">account.delivery.forecast.invoice.cliente</field>
+            <field name="arch" type="xml">
+                <graph string="Resumen" type="bar">
+                    <field name="partner_id" type="row"/>
+                    <field name="total_amount" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+		<record id="action_delivery_cadena_forecast_facturas_cliente_form1" model="ir.actions.act_window">
+		    <field name="name">Resumen de Pedidos</field>
+		    <field name="res_model">account.delivery.forecast.invoice.cliente</field>
+		    <field name="view_type">form</field>
+		    <field name="view_mode">tree,form,graph</field>
+			<field name="domain">[('treasury_id','=',active_id)]</field>
+		    <field name="help">Resumen de Pedidos</field>
+		</record>
+
+        <record model="ir.ui.view" id="account_delivery_forecast_cliente_search_view">
+            <field name="name">account.delivery.forecast.cliente.search.view</field>
+            <field name="model">account.delivery.forecast.cliente</field>
+            <field name="arch" type="xml">
+                <search string="Treasury Forecast">
+                    <field name="name" />
+                    <field name="start_date" />
+                    <field name="end_date" />
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="account_delivery_forecast_cliente_tree_view">
+            <field name="name">account.delivery.forecast.cliente.tree</field>
+            <field name="model">account.delivery.forecast.cliente</field>
+            <field name="arch" type="xml">
+                <tree string="Treasury Forecast">
+                	<field name="cliente_id"/>
+                    <field name="start_date" />
+                    <field name="end_date" />
+		    		<field name="currency_id"/>
+		   			<field name="total_incoming"/>
+					<field name="utilidad_bruta" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+	<record model="ir.ui.view" id="account_delivery_forecast_product_cliente_tree_view">
+            <field name="name">account.delivery.forecast.product.cliente.tree</field>
+            <field name="model">account.delivery.forecast.product.cliente</field>
+            <field name="arch" type="xml">  
+                <tree string="Resumen de productos" editable="bottom" readonly="True">
+                    <field name="product_id"/>
+                    <field name="galonaje" sum="Total"/>
+                    <field name="total_venta" sum="Total"/>
+					<field name="porcentaje_sale" />
+                  </tree>
+            </field>
+    </record>
+
+	<record model="ir.ui.view" id="view_forecast_product_cliente_graph">
+            <field name="name">account.delivery.forecast.product.cliente.graph</field>
+            <field name="model">account.delivery.forecast.product.cliente</field>
+            <field name="arch" type="xml">
+                <graph string="Resumen" type="bar">
+                    <field name="product_id" type="row"/>
+                    <field name="total_venta" type="measure"/>
+                </graph>
+            </field>
+    </record>
+
+	<record id="action_delivery_cadena_forecast_product_cliente_form1" model="ir.actions.act_window">
+		    <field name="name">Resumen de Productos</field>
+		    <field name="res_model">account.delivery.forecast.product.cliente</field>
+		    <field name="view_type">tree</field>
+		    <field name="view_mode">graph,tree</field>
+			<field name="domain">[('treasury_id','=',active_id)]</field>
+		    <field name="help">Resumen de Productos</field>
+	</record>
+
+
+
+	<record model="ir.ui.view" id="account_delivery_forecast_cliente_form_view">
+        <field name="name">account.delivery.forecast.form.cliente</field>
+        <field name="model">account.delivery.forecast.cliente</field>
+        <field name="arch" type="xml">
+        <form string="Resumen de cliente">
+         <header>
+			<button name="action_draft" type="object" string="Borrador" states="progress"/>
+			<button name="action_done" type="object" string="Finalizado" states="draft,progress" class="oe_highlight oe_read_only"/>
+			<button name="button_calculate" type="object" string="Obtener datos" class="oe_highlight"/>
+			<field name="state" widget="statusbar" nolabel="1"/>
+       	</header>
+         <sheet>		       
+		<div class="oe_right oe_button_box" position="inside">
+            <button class="oe_stat_button"
+					icon="fa-strikethrough"
+                    type="action" name="%(action_delivery_cadena_forecast_facturas_cliente_form1)d"
+                    string="Resumen">
+            </button>
+			<button class="oe_stat_button"
+                    icon="fa-tasks"
+                    type="action" name="%(action_delivery_cadena_forecast_product_cliente_form1)d"
+                    string="Productos">
+            </button>	
+        </div>   
+	  	<!--<separator string="Rango de Fechas"/> -->    
+        <group colspan="4" col="4">
+            <group colspan="4">
+				<group cols="2">          
+			 		<field name="start_date" attrs="{'readonly': [('state','!=','draft')]}"/>
+ 					 <field name="cliente_id" options="{'no_create': True}"/>
+				</group>
+			<group cols="2">
+                  <field name="end_date" attrs="{'readonly': [('state','!=','draft')]}"/>
+                  <field name="currency_id" attrs="{'readonly': [('state','!=','draft')]}"/> 	
+			</group>
+        </group>		
+	     <separator string="Resumen de Operaciones"/>
+  			<group colspan="4" col="2">				             
+				<group cols="2">
+					<h3><strong><label string="Total de Ventas:"/></strong></h3>
+			 		<field name="total_incoming" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+						
+					
+				</group>  
+				<group cols="2">
+					<h3><strong><label string="Costo de Combustible:"/></strong></h3>
+			 			<field name="total_combustible" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+					<h3><strong><label string="Total de fletes:"/></strong></h3>
+			 			<field name="total_fletes" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+					<h3><strong><label string="Total Costos:"/></strong></h3>
+			 		<field name="costos_directos" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+
+						<h3><strong><label string="Notas de Crédito:"/></strong></h3>
+			 		<field name="total_notas" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+				</group>											
+			</group>
+					    
+   <notebook colspan="4">  
+		<page string="Indicadores">
+			<separator string="Indicadores"/>
+				<group colspan="4" col="2">				             
+				<group cols="2">
+						<field name="total_galonaje" invisible="1"/>
+						<field name="total_gal"/>
+				</group>
+				<group cols="2">
+					<field name="costo_porcentual" />
+					<field name="costo_transporte"/>
+				</group>											
+			</group>	
+
+			<field name="product_forecast_ids"/>
+	  </page> 
+      <page string="Facturas de Ventas" sequence="10">
+		<group colspan="4" col="2">				             
+				<group cols="2">
+					<field name="count_facturas"/>
+				</group>
+				<group cols="2">
+					
+				</group>											
+			</group>
+          <field name="out_invoice_ids" nolabel="1"/> 	
+      </page>
+      
+   </notebook>
+
+
+        <p class="oe_grey"  colspan="4">
+        Los filtros a continuación, se utilizan para obtener el estado y el monto de los documentos:
+        </p>
+        <group colspan="4">               
+          <separator string="Filters" colspan="4" />
+				<group cols="2">
+		           <field name="check_draft" colspan="2" attrs="{'readonly': [('state','!=','draft')]}"/>
+		           <field name="check_proforma" colspan="2" attrs="{'readonly': [('state','!=','draft')]}" />
+		           <button name="button_calculate" class="oe_highlight" attrs="{'invisible': [('state','!=','draft')]}"
+		            string="Obtener datos" type="object" colspan="4" />
+			
+				</group>
+				 <group cols="2">
+				 	<field name="check_open" colspan="2" attrs="{'readonly': [('state','!=','draft')]}"/>
+					<field name="check_done" colspan="2" attrs="{'readonly': [('state','!=','draft')]}"/>
+				 </group>
+ 
+        </group>
+        </group>
+		</sheet>
+    </form>
+    </field>
+    </record>
+
+      <record id="action_delivery_cadena_forecast_cliente_form" model="ir.actions.act_window">
+		    <field name="name">Resumen de Cliente</field>
+		    <field name="res_model">account.delivery.forecast.cliente</field>
+		    <field name="view_type">form</field>
+		    <field name="view_mode">tree,form</field>
+		    <field name="help">Resumen de Cliente</field>
+	</record>
+
+        <!--<menuitem id="menu_account_treasury_forecast" name="Account Treasury Forecast"
+            parent="financial.finanzas_principal" sequence="8" groups="account.group_account_user"/>-->
+        <menuitem action="action_delivery_cadena_forecast_cliente_form" id="menu_delivery_cadena_forecast_cliente_form"
+            name="Reporte por Cliente" parent="delivery_cost.menu_reportes" />
+
+    </data>
+</openerp>

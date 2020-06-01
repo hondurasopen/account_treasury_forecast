@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+<data>
+
+<record model="ir.ui.view" id="account_antiguedad_saldos_linea_clientes_view">
+    <field name="name">account.antiguedad.saldos.clientes.tree</field>
+    <field name="model">account.antiguedad.saldos.clientes</field>
+    <field name="arch" type="xml">  
+        <tree string="Facturas" editable="bottom" readonly="True" create="0"> <!-- colors="blue:old_pay == False;red:old_pay == True;">-->
+            <field name="old_pay" invisible="1"/>
+            <field name="partner_id"/>
+            <field name="invoice_id" invisible="1"/>
+            <field name="numero_factura"/>
+			<field name="invoice_date" readonly="1"/>
+			<field name="residual_amount" sum="Total" invisible="1"/>
+            <field name="total_ncredito" sum="Total"/>
+            <field name="importe_abonado" sum="Total" />
+            <field name="total_amount" sum="Total"/>
+          </tree>
+    </field>
+</record>
+
+<record id="action_antiguedad_saldos_linea" model="ir.actions.act_window">
+<field name="name">Facturas de Cliente</field>
+<field name="res_model">account.antiguedad.saldos.clientes</field>
+<field name="view_mode">tree</field>
+<field name="domain">[('obj_parent','=',active_id)]</field>
+</record>
+
+
+<record model="ir.ui.view" id="account_antiguedad_tree_view">
+    <field name="name">account.antiguedad.tree</field>
+    <field name="model">account.antiguedad</field>
+    <field name="arch" type="xml">
+        <tree string="Treasury Forecast">
+            <field name="start_date" />
+            <field name="end_date" />
+    		<field name="currency_id"/>
+   			<field name="total_facturado"/>
+			<field name="saldo_pendiente"/>
+        </tree>
+    </field>
+</record>
+
+<record model="ir.ui.view" id="account_antiguedad_form_view">
+<field name="name">account.antiguedad.form</field>
+<field name="model">account.antiguedad</field>
+<field name="arch" type="xml">
+<form string="Factura de clientes">
+    <header>
+        <button name="button_calculate" type="object" string="Obtener datos" class="oe_highlight"/>
+    </header>
+    <sheet>
+	<div class="oe_right oe_button_box" position="inside">
+        <button class="oe_stat_button"
+                icon="fa-strikethrough"
+                type="action" name="%(action_antiguedad_saldos_linea)d"
+                string="Facturas de Clientes">
+        </button>
+    </div>   
+  	<separator string="Rango de Fechas"/>     
+    <group colspan="4">
+		<group cols="2">          
+	 		<field name="start_date" />
+				<field name="currency_id" />  
+		</group>
+		<group cols="2">
+              <field name="end_date" />	
+		</group>
+    </group>		
+    <separator string="Ventas y Cobros historicos"/>
+    <group colspan="4" col="2">				             
+        <group cols="2">
+        	<h3><strong><label string="Total de ventas:"/></strong></h3>
+        		<field name="total_facturado" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+            <h3><strong><label string="Notas de crédito:"/></strong></h3>
+                <field name="total_notas" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+        </group>  
+        <group cols="2">
+        	<h3><strong><label string="Total de pagos:"/></strong></h3>
+        	    <field name="total_pagos"  nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+            <h3><strong><label string="Saldo pendiente:"/></strong></h3>
+                <field name="saldo_pendiente"  nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+        </group>											
+    </group>
+    <notebook colspan="4">
+    <page string="Facturas de Ventas" sequence="10">
+      <field name="out_invoice_ids" nolabel="1" readonly="1"/>  
+    </page>                 
+    </notebook>
+</sheet>
+</form>
+</field>
+</record>
+
+<record id="action_antiguedad_saldos_form" model="ir.actions.act_window">
+    <field name="name">Antiguedad de cobros</field>
+    <field name="res_model">account.antiguedad</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="help">Antiguedad de cobros</field>
+</record>
+
+<!--<menuitem id="menu_account_treasury_forecast" name="Account Treasury Forecast"
+    parent="financial.finanzas_principal" sequence="8" groups="account.group_account_user"/>-->
+<menuitem action="action_antiguedad_saldos_form" id="menu_antguedad_saldos"
+    name="Antiguedad de cobros" parent="delivery_cost.menu_reportes" />
+
+    </data>
+</openerp>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+<data>
+
+<record model="ir.ui.view" id="vedd_grados_factura_proveedor_line_tree_view">
+<field name="name">vedd.grados.factura.proveedor.line.tree_view</field>
+<field name="model">vedd.grados.factura.proveedor.line</field>
+<field name="arch" type="xml">  
+    <tree string="Detalle 60 grados" create="0" delete="0" colors="red:has_debit_note == False; green:descuento_60 == 0">
+      <field name="fecha" />
+      <field name="factura" />
+      <field name="numero_orden" />
+      <field name="total" sum="Total"/>
+      <field name="total_orden" sum="Total"/>
+      <field name="descuento_60" sum="Total"/>
+      <field name="has_debit_note"/>
+      <field name="move_note_id"/>
+    </tree>
+</field>
+</record>
+
+<record id="action_vedd_grados_factura_proveedor_line" model="ir.actions.act_window">
+	<field name="name">Detalle 60 grados</field>
+	<field name="res_model">vedd.grados.factura.proveedor.line</field>
+	<field name="view_type">form</field>
+	<field name="view_mode">tree</field>
+	<field name="domain"> [('parent_id', '=', active_id)]</field>
+</record>
+
+<record id="vedd_grados_factura_proveedor_form_view" model="ir.ui.view">
+<field name="name">vedd.grados.factura.proveedor.form.view</field>
+<field name="model">vedd.grados.factura.proveedor</field>
+<field name="arch" type="xml">
+<form string="Flujo de Efectivo">
+  <header>
+  	<button name="get_invoice_supplier" type="object" string="Obtener facturas" class="oe_highlight" states="draft"/>
+    <button name="generate_journal_entries" type="object" string="Validar Notas de débito" class="oe_highlight" states="draft"/>
+    <field name="state" widget="statusbar" nolabel="1"/>
+  </header>
+   <sheet>
+      <div class="oe_right oe_button_box" position="inside">
+        <button class="oe_stat_button" icon="fa-list-ol" type="action" name="%(action_vedd_grados_factura_proveedor_line)d" string="Detalle"/>
+      </div>     
+      <group colspan="4">
+      	<group cols="2">          
+      		<field name="start_date" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+          <field name="supplier_id" required="1" domain="[('supplier', '=', True),('supplier_combustible', '=', True)]" 
+                options="{'no_create': True}" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+          <field name="move_id"  attrs="{'invisible': [('state', '=', 'draft')]}" readonly="1"/>
+      	</group>
+      	<group cols="2">
+      		<field name="end_date" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>	
+           <field name="monto_nota" readonly="1" />
+      	</group>
+      </group>
+      <notebook>
+        <page string="Facturas">
+              <field name="line_ids" readonly="1">  
+                  <tree create="0" delete="0" colors="red:has_debit_note == False; green:descuento_60 == 0">
+                      <field name="fecha" />
+                      <field name="factura" />
+                      <field name="numero_orden" />
+                      <field name="fecha" />
+                      <field name="total" sum="Total"/>
+                      <field name="total_orden" sum="Total"/>
+                      <field name="descuento_60" sum="Total"/>
+                      <field name="has_debit_note"/>
+                      <field name="move_note_id"/>
+                  </tree>
+              </field>
+        </page>
+      </notebook>
+  </sheet>
+</form>
+</field>
+</record>
+
+
+<record model="ir.ui.view" id="vedd_grados_factura_proveedor_tree_view">
+<field name="name">vedd.grados.factura.proveedor.tree_view</field>
+<field name="model">vedd.grados.factura.proveedor</field>
+<field name="arch" type="xml">  
+    <tree string="Fix de facturas" >
+        <field name="start_date"/>
+         <field name="end_date" />
+         <field name="supplier_id" />
+         <field name="monto_nota" />
+         <field name="state" />
+    </tree>
+</field>
+</record>
+
+
+<record model="ir.actions.act_window" id="action_grados_60_grados">
+<field name="name">Reporte 60 grados</field>
+<field name="res_model">vedd.grados.factura.proveedor</field>
+<field name="view_type">form</field>
+<field name="view_model">tree,form</field>
+<field name="help" type="html">
+<p class="oe_view_nocontent_create">Crear</p>
+</field>
+</record>
+
+
+<menuitem action="action_grados_60_grados" id="grados_invoice_menu" sequence="100" name="Reporte 60 grados" parent="delivery_cost.menu_reportes" />
+
+    </data>
+</openerp>

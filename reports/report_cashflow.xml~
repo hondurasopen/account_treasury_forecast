@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+    <report
+        id="report_flow_detail"
+        model="account.treasury.forecast"
+        string="Detalle de Flujo de Caja"
+        name="account_treasury_forecast.report_cashflow_detail"
+        file="account_treasury_forecast.report_cashflow_detail"
+        report_type="qweb-pdf" />
+</data>
+</openerp>
+

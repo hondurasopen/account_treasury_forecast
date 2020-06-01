@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+ <data>
+
+<record id="wizard_journal_entries_modified_line_tree_view" model="ir.ui.view">
+<field name="name">wizard.journal.entries.modified.line.line.tree.view</field>
+<field name="model">wizard.journal.entries.modified.line</field>                     
+<field name="arch" type="xml">
+    <tree create="0" delete="0" edit="0">
+	    <field name="move_id" />
+		<field name="ref"/>
+		<field name="period_id" />
+		<field name="date" />
+		<field name="amount" sum="total"/>
+		<field name="user_create_uid" />
+		<field name="user_write_uid" />
+		<field name="write_date"/>
+    </tree>             
+</field>
+</record>
+
+
+
+
+<record model="ir.ui.view" id="wizard_journal_entries_modified_form_view">
+<field name="name">wizard.journal.entries.modified.form.cliente</field>
+<field name="model">wizard.journal.entries.modified</field>
+<field name="arch" type="xml">
+<form string="Resumen de cliente">
+ <header>
+	<button name="button_get_journal" type="object" string="Obtener asientos" class="oe_highlight"/>
+	</header>
+ <sheet>		        
+    <group colspan="4">
+		<group cols="2">          
+		 		<field name="start_date"/>
+		 		<field name="journal_id"/>
+		</group>
+		<group cols="2">
+              <field name="end_date" />
+		</group>
+    </group>				    
+   	<notebook colspan="4">  
+ 	 <page string="Asientos" sequence="10">
+          <field name="journal_entries_ids"/>
+      </page>
+   </notebook>    
+</sheet>
+</form>
+</field>
+</record>
+
+<record model="ir.ui.view" id="wizard_journal_entries_modified_tree_view">
+<field name="name">wizard.journal.entries.modified.tree.view</field>
+<field name="model">wizard.journal.entries.modified</field>
+<field name="arch" type="xml">
+    <tree string="Asientos modificados">
+    	<field name="start_date"/>
+        <field name="end_date" />
+    </tree>
+</field>
+</record>
+
+<record id="action_wizard_journal_entries_modified" model="ir.actions.act_window">
+<field name="name">Auditoria de Asientos</field>
+<field name="res_model">wizard.journal.entries.modified</field>
+<field name="view_type">form</field>
+<field name="view_mode">tree,form</field>
+<field name="help">Crear reporte</field>
+</record>
+
+
+<menuitem action="action_wizard_journal_entries_modified" id="menu_wizard_journal_entries_modified"
+    name="Auditoria de Asientos" parent="delivery_cost.menu_reportes" />
+
+    </data>
+</openerp>
